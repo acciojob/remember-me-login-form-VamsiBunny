@@ -1,13 +1,66 @@
 <!DOCTYPE html>
-
-<html>
-
+<html lang="en">
 <head>
-	<link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+            margin: 0;
+        }
+        .login-form {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            text-align: center;
+        }
+        input[type="text"], input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        input[type="checkbox"] {
+            margin-right: 10px;
+        }
+        input[type="submit"] {
+            width: 100%;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+        .existing-user-btn {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #2196F3;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .existing-user-btn:hover {
+            background-color: #0b7dda;
+        }
+    </style>
 </head>
-
 <body>
-	 <div class="login-form">
+
+    <div class="login-form">
         <h1>Login Form</h1>
         <form id="loginForm">
             <input type="text" id="username" placeholder="Username" required><br>
@@ -17,9 +70,60 @@
         </form>
         <button id="existing" class="existing-user-btn" style="display: none;">Login as existing user</button>
     </div>
-    <script type="text/javascript" src="./script.js">
-</script>
+
+    <script>
+        // DOM elements
+        const loginForm = document.getElementById("loginForm");
+        const usernameField = document.getElementById("username");
+        const passwordField = document.getElementById("password");
+        const checkboxField = document.getElementById("checkbox");
+        const submitButton = document.getElementById("submit");
+        const existingButton = document.getElementById("existing");
+
+        // Check if there's data in localStorage on page load
+        window.onload = () => {
+            const savedUsername = localStorage.getItem("username");
+            const savedPassword = localStorage.getItem("password");
+
+            if (savedUsername && savedPassword) {
+                // If there are saved details, show the "Login as existing user" button
+                existingButton.style.display = "block";
+            }
+        };
+
+        // Handle the login form submission
+        loginForm.addEventListener("submit", (e) => {
+            e.preventDefault();  // Prevent default form submission
+
+            const username = usernameField.value;
+            const password = passwordField.value;
+            const rememberMe = checkboxField.checked;
+
+            if (rememberMe) {
+                // Save the username and password to localStorage if "remember me" is checked
+                localStorage.setItem("username", username);
+                localStorage.setItem("password", password);
+            } else {
+                // Remove the username and password from localStorage if checkbox is unchecked
+                localStorage.removeItem("username");
+                localStorage.removeItem("password");
+            }
+
+            // Show the alert with the username
+            alert(`Logged in as ${username}`);
+
+            // If "remember me" is unchecked, the "Login as existing user" button disappears
+            if (!rememberMe) {
+                existingButton.style.display = "none";
+            }
+        });
+
+        // Handle the "Login as existing user" button click
+        existingButton.addEventListener("click", () => {
+            const savedUsername = localStorage.getItem("username");
+            alert(`Logged in as ${savedUsername}`);
+        });
+    </script>
 
 </body>
-
 </html>
